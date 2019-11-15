@@ -7,7 +7,7 @@ int main(){
     a.insert("holaaa");
 
     cout <<a.search_by_complete_word("hola")<<endl;
-    a.delete_("hol");
+    a.delete_("hola");
     cout <<a.search_by_complete_word("hola")<<endl;
     cout <<a.search_by_complete_word("holaaa")<<endl;
 
