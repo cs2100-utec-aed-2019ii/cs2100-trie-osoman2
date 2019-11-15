@@ -76,9 +76,44 @@ public:
         else return false;
     }
 
+    
     void delete_(string cad){
-
+        if(search_by_complete_word(cad)==false){cout<<"No existe esa palabra"<<endl;return;}
+        else delete_(root,cad,0);
     }
+    void delete_(TrieNode* nodo,string cad,int indice){
+        if(nodo){
+            auto aux = cad[indice];
+            auto hijo = nodo->get(aux);
+
+            if (nodo->children.size()==1){
+                if(indice+1==cad.length()){
+                    if (hijo->children.size()==0){
+                        hijo = nullptr;
+                        nodo->children.clear();
+                        if(search_by_complete_word(redudele(cad)))return;
+                        else delete_(root,redudele(cad),0);
+                    }
+                    else {hijo->is_node = false;return;}
+                    
+                }
+                else delete_(hijo,cad,indice+1);
+            }
+            else{
+                if(indice+1==cad.length()) hijo->is_node =false;
+                else delete_(hijo,cad,indice+1);
+            }
+        }
+    }
+    string redudele(string cad){
+        string a;
+        for (int i = 0; i < cad.length()-1; i++)
+        {
+            a = a+cad[i];
+        }
+        return a;
+    }
+    
 
     void print(){
 

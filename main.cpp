@@ -3,9 +3,13 @@
 int main(){
     Trie a;
     a.insert("hola");
-  
-    cout <<a.search_by_prefix("ao")<<endl;
-    cout <<a.search_by_complete_word("hol")<<endl;
+    a.insert("holaa");
+    a.insert("holaaa");
+
+    cout <<a.search_by_complete_word("hola")<<endl;
+    a.delete_("hol");
+    cout <<a.search_by_complete_word("hola")<<endl;
+    cout <<a.search_by_complete_word("holaaa")<<endl;
 
     return 0;
 }
