@@ -114,9 +114,19 @@ public:
         return a;
     }
     
-
     void print(){
-
+        print(root);    
+    }
+    void print(TrieNode* nodo){
+        if(nodo){
+            for (auto i = nodo->children.begin(); i != nodo->children.end(); i++)
+            {
+               cout<<i->first<<" ";
+               print(i->second);
+            }
+            cout<<endl;
+        }
+        return;
     }
 };
 
