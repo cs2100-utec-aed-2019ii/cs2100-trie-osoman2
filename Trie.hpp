@@ -2,19 +2,49 @@
 #define TRIE_H
 #include "TrieNode.hpp"
 #include <string>
+#include <fstream>
 class Trie
 {
-private:
+public:
  
     TrieNode* root;
-public:
+
     Trie():root(nullptr){};
     
     ~Trie(){}
 
+    void desde_ar_c(string n_archivo){
+        ifstream archivo(n_archivo);
+        string linea;
+        string palabra;
+        while(getline(archivo,linea)){
+            for(int i = 0;i<linea.size();i++){
+                if(linea[i] == ' ' ){
+                    cout<<palabra<<endl;
+                    insert(palabra);
+                    palabra.clear();
+                }
+                else{
+                    palabra.push_back(linea[i]);
+                }
+            }
+        }
+        archivo.close();
+    }
+
+    void desde_ar_n(string n_archivo){
+        ifstream archivo(n_archivo);
+        string cadena;
+        while(getline(archivo,cadena)){
+            insert(cadena);
+        }
+        archivo.close();
+    }
 
     void insert(string cad){
-        insert(0,root,cad);
+        if (search_by_complete_word(cad))
+            return; 
+        else insert(0,root,cad);
     }
     void insert(int indice,TrieNode* &nodo,string cad){
         if(cad.length()==indice){
@@ -44,6 +74,7 @@ public:
     bool search_by_prefix(string cad){
         return search_by_prefix(0,cad,root); 
     }
+    
     bool search_by_prefix(int indice,string cad,TrieNode* &nodo){
         if(nodo){
             auto aux = cad[indice];
@@ -56,6 +87,26 @@ public:
         }
         else return false;
     }
+
+
+
+   // string corregir(string cadena){
+   //     return corregir(0,cadena,root,0);
+   // }
+   // string corregir(int indice,string cad,TrieNode* &nodo,int contador){
+   //     for(int i = 0;i<2;i++){
+   //         if(estaenelnodo(cad[indice+i],nodo)){
+//
+   //         }
+   //         else contador++;
+   //     }
+   // }
+
+    bool estaenelnodo(char letra,TrieNode* &nodo ){
+        if(nodo->children.find(letra)==nodo->children.end())return false;
+        return true;
+    }
+
 
     bool search_by_complete_word(string cad){
         return search_by_complete_word(0,cad,root); 
@@ -115,18 +166,33 @@ public:
     }
     
     void print(){
-        print(root);    
+        
+        TrieNode* temp = root;
+        
+        string palabra;
+        for (auto i = temp->children.begin(); i != temp->children.end(); ++i)
+            {   
+                palabra.push_back(i->first);
+                
+                print(palabra,i->second);
+                palabra.clear(); 
+            }  
     }
-    void print(TrieNode* nodo){
-        if(nodo){
-            for (auto i = nodo->children.begin(); i != nodo->children.end(); i++)
-            {
-               cout<<i->first<<" ";
-               print(i->second);
-            }
-            cout<<endl;
+    void print(string cadena, TrieNode* nodo){
+        if(nodo->children.empty() && nodo->is_node ){
+            cout<<cadena<<endl;
+            return;
         }
-        return;
+        if(nodo->is_node){
+            cout<<cadena<<endl;
+        }
+        
+        for (auto i = nodo->children.begin(); i != nodo->children.end(); ++i)
+        {
+           cadena.push_back(i->first); 
+           print(cadena,i->second);
+           cadena.pop_back();
+        }        
     }
 };
 
