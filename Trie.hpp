@@ -1,6 +1,7 @@
 #ifndef TRIE_H
 #define TRIE_H
 #include "TrieNode.hpp"
+#include <vector>
 #include <string>
 #include <fstream>
 class Trie
@@ -90,17 +91,18 @@ public:
 
 
 
-   // string corregir(string cadena){
-   //     return corregir(0,cadena,root,0);
-   // }
-   // string corregir(int indice,string cad,TrieNode* &nodo,int contador){
-   //     for(int i = 0;i<2;i++){
-   //         if(estaenelnodo(cad[indice+i],nodo)){
-//
-   //         }
-   //         else contador++;
-   //     }
-   // }
+   string corregir(string cadena){       
+       return corregir(0,cadena,root,0);
+   }
+   string corregir(int indice,string cad,TrieNode* &nodo,int contador){
+       for(int i = 0;i<2;i++){
+           if(estaenelnodo(cad[indice+i],nodo)){
+
+           }
+           else contador++;
+       }
+       return cad;
+   }
 
     bool estaenelnodo(char letra,TrieNode* &nodo ){
         if(nodo->children.find(letra)==nodo->children.end())return false;
@@ -173,7 +175,6 @@ public:
         for (auto i = temp->children.begin(); i != temp->children.end(); ++i)
             {   
                 palabra.push_back(i->first);
-                
                 print(palabra,i->second);
                 palabra.clear(); 
             }  
@@ -194,6 +195,49 @@ public:
            cadena.pop_back();
         }        
     }
+
+    void vectores(int filas,int columnas,int **a){
+        string cadena;
+        string str;
+        for (int i = 0; i < filas;i++)
+        {   
+            for(int j = 0; j< columnas;j++){
+                str = to_string(a[i][j]);
+                cadena= cadena+str; 
+            }     
+            if(search_by_complete_word(cadena)){
+                cout<<cadena<<endl;
+            }
+            insert(cadena);
+            cadena.clear();
+        }       
+        cout<<"no hay repeticiones"<<endl;    
+    }
+
+    void storewords(string oracion){
+        string cadena;
+        map<string,int> aux;
+        oracion = oracion+" ";
+        for (int i = 0; i < oracion.size(); i++)
+        {   cadena.push_back(oracion[i]);   
+            if(oracion[i]==' '){
+                if(search_by_complete_word(cadena)){
+                    auto a = aux.find(cadena);
+                    a->second = a->second+1;  
+                }
+                else {  
+                aux.insert({cadena,1}); 
+                insert(cadena);
+                }
+                cadena.clear(); 
+            }
+        }
+        for (auto i = aux.begin(); i != aux.end(); ++i)
+        {
+           cout<<i->first<<"-> "<<i->second<<endl;
+        } 
+    }
+
 };
 
 
